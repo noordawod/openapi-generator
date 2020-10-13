@@ -5,15 +5,25 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class Category {
+  /// Returns a new [Category] instance.
   Category({
     this.id,
     this.name,
   });
+
+  /// Returns a new [Category] instance and optionally import its values from
+  /// [json] if it's non-null.
+  Category.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      id = json['id'];
+      name = json['name'];
+    }
+  }
 
   
   int id;
@@ -33,14 +43,6 @@ class Category {
 
   @override
   String toString() => 'Category[id=$id, name=$name]';
-
-  Category.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return;
-    }
-    id = json['id'];
-    name = json['name'];
-  }
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};

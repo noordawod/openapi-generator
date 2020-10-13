@@ -8,9 +8,47 @@ class {{{classname}}} {
   final ApiClient apiClient;
   {{#operation}}
 
-  /// {{{summary}}} with HTTP info returned
+  {{#summary}}
+  /// {{{summary}}}
+  {{/summary}}
+  {{#notes}}
+    {{#summary}}
   ///
+    {{/summary}}
   /// {{{notes}}}
+  ///
+  /// Note: This method returns the HTTP [Response].
+  {{/notes}}
+  {{^notes}}
+    {{#summary}}
+  ///
+  /// Note: This method returns the HTTP [Response].
+    {{/summary}}
+    {{^summary}}
+  /// Performs an HTTP '{{{httpMethod}}} {{{path}}}' operation and returns the [Response].
+    {{/summary}}
+  {{/notes}}
+  {{#hasParams}}
+    {{#summary}}
+  ///
+    {{/summary}}
+    {{^summary}}
+      {{#notes}}
+  ///
+      {{/notes}}
+    {{/summary}}
+  /// Parameters:
+  ///
+  {{/hasParams}}
+  {{#allParams}}
+  /// * [{{{dataType}}}] {{{paramName}}}{{#required}} (required){{/required}}{{#optional}} (optional){{/optional}}:
+    {{#description}}
+  ///   {{{description}}}
+    {{/description}}
+    {{#hasMore}}
+  ///
+    {{/hasMore}}
+  {{/allParams}}
   {{#returnType}}Future<Response> {{/returnType}}{{^returnType}}Future {{/returnType}}{{{nickname}}}WithHttpInfo({{#allParams}}{{#required}}{{{dataType}}} {{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}}{{#hasOptionalParams}}{ {{#allParams}}{{^required}}{{{dataType}}} {{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}} }{{/hasOptionalParams}}) async {
     // Verify required params are set.
     {{#allParams}}
@@ -92,13 +130,36 @@ class {{{classname}}} {
     );
   }
 
+  {{#summary}}
   /// {{{summary}}}
+  {{/summary}}
+  {{#notes}}
+  {{#summary}}
   ///
-  {{#allParams}}
-  ///{{{dataType}}} {{{paramName}}} {{#required}} (required){{/required}}{{#optional}}(optional){{/optional}}:
-  ///    {{#description}} {{{description}}}{{/description}}
-  {{/allParams}}
+  {{/summary}}
   /// {{{notes}}}
+  {{/notes}}
+  {{#hasParams}}
+    {{#summary}}
+  ///
+    {{/summary}}
+    {{^summary}}
+      {{#notes}}
+  ///
+      {{/notes}}
+    {{/summary}}
+  /// Parameters:
+  ///
+  {{/hasParams}}
+  {{#allParams}}
+  /// * [{{{dataType}}}] {{{paramName}}}{{#required}} (required){{/required}}{{#optional}} (optional){{/optional}}:
+    {{#description}}
+  ///   {{{description}}}
+    {{/description}}
+    {{#hasMore}}
+  ///
+    {{/hasMore}}
+  {{/allParams}}
   {{#returnType}}Future<{{{returnType}}}> {{/returnType}}{{^returnType}}Future {{/returnType}}{{{nickname}}}({{#allParams}}{{#required}}{{{dataType}}} {{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}}{{#hasOptionalParams}}{ {{#allParams}}{{^required}}{{{dataType}}} {{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}} }{{/hasOptionalParams}}) async {
     final response = await {{{nickname}}}WithHttpInfo({{#allParams}}{{#required}}{{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}}{{#hasOptionalParams}} {{#allParams}}{{^required}}{{{paramName}}}: {{{paramName}}}{{#hasMore}}, {{/hasMore}}{{/required}}{{/allParams}} {{/hasOptionalParams}});
     if (response.statusCode >= 400) {
@@ -113,16 +174,16 @@ class {{{classname}}} {
         {{/returnType}}
       {{/isListContainer}}
       {{^isListContainer}}
-        {{#isMapContainer}}
+        {{#isMap}}
           {{#returnType}}
       return {{{returnType}}}.from(apiClient.deserialize(_decodeBodyBytes(response), '{{{returnType}}}'));
           {{/returnType}}
-        {{/isMapContainer}}
-        {{^isMapContainer}}
+        {{/isMap}}
+        {{^isMap}}
           {{#returnType}}
       return apiClient.deserialize(_decodeBodyBytes(response), '{{{returnType}}}') as {{{returnType}}};
           {{/returnType}}
-        {{/isMapContainer}}
+        {{/isMap}}
       {{/isListContainer}}
     }
     return{{#returnType}} null{{/returnType}};

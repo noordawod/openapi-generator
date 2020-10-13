@@ -5,16 +5,27 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class ApiResponse {
+  /// Returns a new [ApiResponse] instance.
   ApiResponse({
     this.code,
     this.type,
     this.message,
   });
+
+  /// Returns a new [ApiResponse] instance and optionally import its values from
+  /// [json] if it's non-null.
+  ApiResponse.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      code = json['code'];
+      type = json['type'];
+      message = json['message'];
+    }
+  }
 
   
   int code;
@@ -39,15 +50,6 @@ class ApiResponse {
 
   @override
   String toString() => 'ApiResponse[code=$code, type=$type, message=$message]';
-
-  ApiResponse.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return;
-    }
-    code = json['code'];
-    type = json['type'];
-    message = json['message'];
-  }
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};

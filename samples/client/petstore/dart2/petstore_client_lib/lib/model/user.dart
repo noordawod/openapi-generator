@@ -5,11 +5,12 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class User {
+  /// Returns a new [User] instance.
   User({
     this.id,
     this.username,
@@ -20,6 +21,21 @@ class User {
     this.phone,
     this.userStatus,
   });
+
+  /// Returns a new [User] instance and optionally import its values from
+  /// [json] if it's non-null.
+  User.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      id = json['id'];
+      username = json['username'];
+      firstName = json['firstName'];
+      lastName = json['lastName'];
+      email = json['email'];
+      password = json['password'];
+      phone = json['phone'];
+      userStatus = json['userStatus'];
+    }
+  }
 
   
   int id;
@@ -69,20 +85,6 @@ class User {
 
   @override
   String toString() => 'User[id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus]';
-
-  User.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return;
-    }
-    id = json['id'];
-    username = json['username'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    password = json['password'];
-    phone = json['phone'];
-    userStatus = json['userStatus'];
-  }
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};

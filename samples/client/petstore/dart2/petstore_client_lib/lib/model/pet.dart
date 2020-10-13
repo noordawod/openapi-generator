@@ -5,11 +5,12 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class Pet {
+  /// Returns a new [Pet] instance.
   Pet({
     this.id,
     this.category,
@@ -18,6 +19,21 @@ class Pet {
     this.tags = const [],
     this.status,
   });
+
+  /// Returns a new [Pet] instance and optionally import its values from
+  /// [json] if it's non-null.
+  Pet.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      id = json['id'];
+      category = Category.fromJson(json['category']);
+      name = json['name'];
+      photoUrls = json['photoUrls'] == null
+        ? null
+        : (json['photoUrls'] as List).cast<String>();
+      tags = Tag.listFromJson(json['tags']);
+      status = PetStatusEnum.fromJson(json['status']);
+    }
+  }
 
   
   int id;
@@ -57,20 +73,6 @@ class Pet {
 
   @override
   String toString() => 'Pet[id=$id, category=$category, name=$name, photoUrls=$photoUrls, tags=$tags, status=$status]';
-
-  Pet.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return;
-    }
-    id = json['id'];
-    category = Category.fromJson(json['category']);
-    name = json['name'];
-    photoUrls = json['photoUrls'] == null
-      ? null
-      : (json['photoUrls'] as List).cast<String>();
-    tags = Tag.listFromJson(json['tags']);
-    status = PetStatusEnum.fromJson(json['status']);
-  }
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};

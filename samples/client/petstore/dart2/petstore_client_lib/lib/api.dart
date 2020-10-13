@@ -5,7 +5,7 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 library openapi.api;
 
@@ -38,6 +38,7 @@ part 'model/tag.dart';
 part 'model/user.dart';
 
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
+const _dateEpochMarker = 'epoch';
 final _dateFormatter = DateFormat('yyyy-MM-dd');
 final _regList = RegExp(r'^List<(.*)>$');
 final _regMap = RegExp(r'^Map<String,(.*)>$');

@@ -5,7 +5,7 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
@@ -23,8 +23,24 @@ class ApiClient {
     _authentications['petstore_auth'] = OAuth();
   }
 
-  String basePath;
-  var client = Client();
+  final String basePath;
+
+  var _client = Client();
+
+  /// Returns the current HTTP [Client] instance to use in this class.
+  ///
+  /// The return value is guaranteed to never be null.
+  Client get client => _client;
+
+  /// Requests to use a new HTTP [Client] in this class.
+  ///
+  /// If the [newClient] is null, an [ArgumentError] is thrown.
+  set client(Client newClient) {
+    if (newClient == null) {
+      throw ArgumentError('New client instance cannot be null.');
+    }
+    _client = newClient;
+  }
 
   final _defaultHeaderMap = <String, String>{};
   final _authentications = <String, Authentication>{};
@@ -78,12 +94,12 @@ class ApiClient {
     }
 
     if (body is MultipartRequest) {
-      var request = MultipartRequest(method, Uri.parse(url));
+      final request = MultipartRequest(method, Uri.parse(url));
       request.fields.addAll(body.fields);
       request.files.addAll(body.files);
       request.headers.addAll(body.headers);
       request.headers.addAll(headerParams);
-      var response = await client.send(request);
+      final response = await _client.send(request);
       return Response.fromStream(response);
     }
 
@@ -94,12 +110,12 @@ class ApiClient {
 
     try {
       switch(method) {
-        case 'POST': return await client.post(url, headers: nullableHeaderParams, body: msgBody);
-        case 'PUT': return await client.put(url, headers: nullableHeaderParams, body: msgBody);
-        case 'DELETE': return await client.delete(url, headers: nullableHeaderParams);
-        case 'PATCH': return await client.patch(url, headers: nullableHeaderParams, body: msgBody);
-        case 'HEAD': return await client.head(url, headers: nullableHeaderParams);
-        case 'GET': return await client.get(url, headers: nullableHeaderParams);
+        case 'POST': return await _client.post(url, headers: nullableHeaderParams, body: msgBody);
+        case 'PUT': return await _client.put(url, headers: nullableHeaderParams, body: msgBody);
+        case 'DELETE': return await _client.delete(url, headers: nullableHeaderParams);
+        case 'PATCH': return await _client.patch(url, headers: nullableHeaderParams, body: msgBody);
+        case 'HEAD': return await _client.head(url, headers: nullableHeaderParams);
+        case 'GET': return await _client.get(url, headers: nullableHeaderParams);
       }
     } on SocketException catch (e, trace) {
       throw ApiException.withInner(400, 'Socket operation failed: $method $path', e, trace);
@@ -145,13 +161,13 @@ class ApiClient {
         default:
           Match match;
           if (value is List && (match = _regList.firstMatch(targetType)) != null) {
-            var newTargetType = match[1];
+            final newTargetType = match[1];
             return value
               .map((v) => _deserialize(v, newTargetType, growable: growable))
               .toList(growable: true == growable);
           }
           if (value is Map && (match = _regMap.firstMatch(targetType)) != null) {
-            var newTargetType = match[1];
+            final newTargetType = match[1];
             return Map.fromIterables(
               value.keys,
               value.values.map((v) => _deserialize(v, newTargetType, growable: growable)),

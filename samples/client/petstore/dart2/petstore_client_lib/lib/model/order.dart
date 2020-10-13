@@ -5,11 +5,12 @@
 
 // ignore_for_file: unused_element, unused_import
 // ignore_for_file: always_put_required_named_parameters_first
-// ignore_for_file: avoid_init_to_null, lines_longer_than_80_chars
+// ignore_for_file: lines_longer_than_80_chars
 
 part of openapi.api;
 
 class Order {
+  /// Returns a new [Order] instance.
   Order({
     this.id,
     this.petId,
@@ -18,6 +19,21 @@ class Order {
     this.status,
     this.complete = false,
   });
+
+  /// Returns a new [Order] instance and optionally import its values from
+  /// [json] if it's non-null.
+  Order.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      id = json['id'];
+      petId = json['petId'];
+      quantity = json['quantity'];
+      shipDate = json['shipDate'] == null
+        ? null
+        : DateTime.parse(json['shipDate']);
+      status = OrderStatusEnum.fromJson(json['status']);
+      complete = json['complete'];
+    }
+  }
 
   
   int id;
@@ -57,20 +73,6 @@ class Order {
 
   @override
   String toString() => 'Order[id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete]';
-
-  Order.fromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return;
-    }
-    id = json['id'];
-    petId = json['petId'];
-    quantity = json['quantity'];
-    shipDate = json['shipDate'] == null ?
-      null :
-      DateTime.parse(json['shipDate']);
-    status = OrderStatusEnum.fromJson(json['status']);
-    complete = json['complete'];
-  }
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
